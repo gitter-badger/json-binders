@@ -127,7 +127,7 @@ More complex scenarios are possible with collections and objects.
 ## Support custom types
 
 You may support any other type like `java.util.Date` implementing `ImplicitSerializer` and `ImplicitDeserializer`. 
-Please find an example in [jsonBinders/shared/src/test/scala/TestCustomDataSerializer.scala](TestCustomDataSerializer.scala) 
+Please find an example in [TestCustomDataSerializer.scala](jsonBinders/shared/src/test/scala/TestCustomDataSerializer.scala) 
 
 ## Schemaless/custom fields
 
