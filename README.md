@@ -151,7 +151,7 @@ import com.hypertino.binders.value._
 case class Crocodile(
   name: String,
   color: Option[String],
-  extra: Value
+  extra: Value          // <- custom extra data stored here
 )
 
 import com.hypertino.binders.json.JsonBinders._
