@@ -111,7 +111,7 @@ In general any collection that implements `canBuildFrom` is supported.
 
 ### `Map[String, Something]`
 
-`Map[String, Something]` is a special case and serialized as a JSON object. The `Something` here is any bindable type.
+`Map[String, Something]` is a special case and it is serialized as a JSON object. The `Something` here can be any bindable type.
 
 ## null handling
 
