@@ -8,7 +8,8 @@
 `json-binders` is a library for Scala/Scala.js that allows you to serialize/deserialize Scala case classes, primitive types to/from JSON representation.
 
 ## Why json-binders?
-There already exists numerous libraries for the same purpose, like `scala/pickling`, `upickle`, `spray-json` targeting Scala and `FasterXML/jackson`, `gson` and many others Java libraries that you may use in Scala.
+
+There already exists a numerous libraries for the same purpose, like `scala/pickling`, `upickle`, `spray-json` targeting Scala and `FasterXML/jackson`, `gson` and many others Java libraries that you may use in Scala.
 
 Key features of `json-binders` are:
 
@@ -30,6 +31,7 @@ Add to project with SBT: `"com.hypertino" %% "json-binders" % "1.0-SNAPSHOT"`
 # Quickstart
 
 A plain example on how-to start using a library:
+
 ```scala
 case class Crocodile(
   name: String,
@@ -37,7 +39,7 @@ case class Crocodile(
   color: Option[String]
 )
 
-import JsonBinders._
+import com.hypertino.binders.json.JsonBinders._
 
 val crocodileJson = Crocodile("Gena", 250, Some("Green")).toJson
 
@@ -57,12 +59,11 @@ That's it. If you work with string representation of JSON then you only have to 
 
 
 ### `Duration` and `FiniteDuration`
-`Duration` and `FiniteDuration` are supported out of box. `Duration` is serialized as string value and `FiniteDuration` as numeric value in milliseconds. 
+`Duration` and `FiniteDuration` are supported out of box. `Duration` is serialized as a string value and `FiniteDuration` as a numeric value in milliseconds. 
     
 ### Case-classes and normal classes/traits with companion object
 
-As shown in example a case classes are supported out of box. Any regular class or a trait that have a companion object with corresponding `apply`/`unaply` methods 
-are supported as well.
+As it shown in an example the case-classes are supported out of box. Any regular class or a trait that have a companion object with corresponding `apply`/`unaply` methods are supported as well.
 
 #### Default case class values
 
@@ -78,18 +79,19 @@ case class Zoo(
 val zoo = """{"name":"Moscow Zoo"}""".parseJson[Zoo]
 // zoo.open is true here
 ```
+
 #### Case-class field names
 
-If you need a special name on some field, you may use an attribute `fieldName`:
+If you need a special name on some field, you may set it with an attribute `fieldName`:
 Example:
 
 ```scala
 case class Kid(
-  @fieldName("kid name") name: String, 
+  @fieldName("name of kid") name: String, 
   age: Int
 )
 
-Kid("John", 13).toJson // produces: {"kid name":"John","age":13}
+Kid("John", 13).toJson // produces: {"name of kid":"John","age":13}
 ```
 
 ## Collections
@@ -106,7 +108,9 @@ List(Kid("John", 13), Kid("Anthony", 12), Kid("Ellie", 13)).toJson
 All collection items have to be bindable (primitive or a case-class or collection, etc). 
 In general any collection that implements `canBuildFrom` is supported.
 
-Map[String, Something]
+### `Map[String, Something]`
+
+`Map[String, Something]` is a special case and serialized as a JSON object. The `Something` here is any bindable type.
 
 ## null handling
 
@@ -126,12 +130,44 @@ More complex scenarios are possible with collections and objects.
 
 ## Support custom types
 
-You may support any other type like `java.util.Date` implementing `ImplicitSerializer` and `ImplicitDeserializer`. 
+You may support any other type like `java.util.Date` implementing `ImplicitSerializer` and `ImplicitDeserializer` traits. 
 Please find an example in [TestCustomDataSerializer.scala](jsonBinders/shared/src/test/scala/TestCustomDataSerializer.scala) 
 
 ## Schemaless/custom fields
 
-TBD
+`binders` library provides a `Value` type that:
+
+- Implements the [`scala.Dynamic`](http://www.scala-lang.org/api/current/index.html#scala.Dynamic) to access object fields using dynamic invocation
+- Can be a `Null`, `Obj`, `Lst`, `Text`, `Number` or `Bool`
+- Guarantees that it's serializable to JSON
+- Provides a `visitor pattern` interface to `Value` tree
+
+One of the examples of using `Value` is when you need some custom, schema-free data inside some class. Example:
+
+```scala
+import com.hypertino.binders.value._
+
+case class Crocodile(
+  name: String,
+  length: Int,
+  color: Option[String],
+  extra: Value
+)
+
+import com.hypertino.binders.json.JsonBinders._
+
+val crocodileJson = Crocodile("Gena", 250, Some("Green"), ObjV("country" -> "Russia", "age" -> 49)).toJson
+
+// crocodileJson: String = {"name":"Gena","length":250,"color":"Green","extra":{"country":"Russia","age":49}}
+
+val crocodile = crocodileJson.parseJson[Crocodile]
+
+val country = crocodile.extra.country // accessing field through `scala.Dynamic`, the country have type `Text`
+println(country.toString)
+
+val age = crocodile.extra.age // returned type `Number`
+println(age.toInt)
+```
 
 # Benchmark
 
