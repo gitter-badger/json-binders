@@ -128,7 +128,7 @@ If a field can't be null, like `Int` or any other primitive value, an exception 
 
 More complex scenarios are possible with collections and objects.
 
-## Support custom types
+## Custom types
 
 You may support any other type like `java.util.Date` implementing `ImplicitSerializer` and `ImplicitDeserializer` traits. 
 Please find an example in [TestCustomDataSerializer.scala](jsonBinders/shared/src/test/scala/TestCustomDataSerializer.scala) 
@@ -149,23 +149,24 @@ import com.hypertino.binders.value._
 
 case class Crocodile(
   name: String,
-  length: Int,
   color: Option[String],
   extra: Value
 )
 
 import com.hypertino.binders.json.JsonBinders._
 
-val crocodileJson = Crocodile("Gena", 250, Some("Green"), ObjV("country" -> "Russia", "age" -> 49)).toJson
+val crocodileJson = Crocodile("Gena", Some("Green"), 
+  ObjV("country" -> "Russia", "age" -> 49) // this constructs Obj type for extra field
+).toJson
 
-// crocodileJson: String = {"name":"Gena","length":250,"color":"Green","extra":{"country":"Russia","age":49}}
+// crocodileJson: String = {"name":"Gena","color":"Green","extra":{"country":"Russia","age":49}}
 
 val crocodile = crocodileJson.parseJson[Crocodile]
 
-val country = crocodile.extra.country // accessing field through `scala.Dynamic`, the country have type `Text`
+val country = crocodile.extra.country // accessing field through `scala.Dynamic` 
 println(country.toString)
 
-val age = crocodile.extra.age // returned type `Number`
+val age = crocodile.extra.age // returned type is `Value` instance type `Number`
 println(age.toInt)
 ```
 
@@ -173,7 +174,7 @@ println(age.toInt)
 
 TBD
 
-# Things to cover:
+# Things to cover
 
 - naming convention converters;
 - stream API;
