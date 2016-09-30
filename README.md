@@ -20,6 +20,7 @@ Key features of `json-binders` are:
 5. Scala.js support
 
 The most close alternative is a [uPickle](http://www.lihaoyi.com/upickle-pprint/upickle/), and the differences that `json-binders` gives you are:
+
 1. 2-3 times performance boost, see below on performance benchmark
 2. ability to work with schemaless fields (`Value` type)
 3. `FasterXML/jackson` dependency for JVM compilation instead of `Jaws` that is used by `uPickle`
