@@ -131,8 +131,33 @@ More complex scenarios are possible with collections and objects.
 
 ## Custom types
 
-You may support any other type like `java.util.Date` implementing `ImplicitSerializer` and `ImplicitDeserializer` traits. 
-Please find an example in [TestCustomDataSerializer.scala](jsonBinders/shared/src/test/scala/TestCustomDataSerializer.scala) 
+You may support any custom type implementing `ImplicitSerializer` and `ImplicitDeserializer` traits.
+
+Example:
+
+```scala
+class InstantTypeSerializer extends ImplicitSerializer[Instant, JsonSerializer[_]] {
+  override def write(serializer: JsonSerializer[_], value: Instant): Unit = serializer.writeLong(value.toEpochMilli)
+}
+
+class InstantTypeDeserializer extends ImplicitDeserializer[Instant, JsonDeserializer[_]] {
+  override def read(deserializer: JsonDeserializer[_]): Instant = Instant.ofEpochMilli(deserializer.readLong())
+}
+
+object InstantJsonBinders {
+  implicit val serializer = new InstantTypeSerializer
+  implicit val deserializer = new InstantTypeDeserializer
+}
+
+import JsonBinders._
+import InstantJsonBinders._
+
+val instantJson = Instant.parse("2016-10-01T00:12:42.007Z").toJson
+// instantJson: String = 1475280762007
+
+val instant = instantJson.parseJson[Instant]
+// instant: org.threeten.bp.Instant = 2016-10-01T00:12:42.007Z
+```
 
 ## Schemaless/custom fields
 
