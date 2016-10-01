@@ -1,8 +1,10 @@
 package com.hypertino.binders.json.bench
 
+import scala.collection.mutable
 import scala.scalajs.js.JSApp
 import scala.util.control.NonFatal
 
+case class MeasureResult(name: String, totalRuns: Long, time: Long, opsPerSec: Double)
 
 object BenchTest extends JSApp {
   val TEST_TIME = 10000 // ms
@@ -17,12 +19,20 @@ object BenchTest extends JSApp {
     measure("Binders_serializeAndDeserializeCaseClass", Binders_serializeAndDeserializeCaseClass)
     measure("Binders_serializeCaseClass", Binders_serializeCaseClass)
     measure("Binders_deserializeCaseClass", Binders_deserializeCaseClass)
-    //measure("Upickle_serializeCaseClass2", Upickle_serializeCaseClass2)
-    //measure("Upickle_serializeAndDeserializeCaseClass2", Upickle_serializeAndDeserializeCaseClass2)
-    //measure("Upickle_deserializeCaseClass2", Upickle_deserializeCaseClass2)
+    measure("Binders_serializeAndDeserializeCaseClass2NoOption", Binders_serializeAndDeserializeCaseClass2NoOption)
+    measure("Upickle_serializeCaseClass2", Upickle_serializeCaseClass2)
+    measure("Upickle_serializeAndDeserializeCaseClass2", Upickle_serializeAndDeserializeCaseClass2)
+    measure("Upickle_deserializeCaseClass2", Upickle_deserializeCaseClass2)
     measure("Upickle_serializeCaseClass", Upickle_serializeCaseClass)
     measure("Upickle_serializeAndDeserializeCaseClass", Upickle_serializeAndDeserializeCaseClass)
     measure("Upickle_deserializeCaseClass", Upickle_deserializeCaseClass)
+    measure("Upickle_serializeAndDeserializeCaseClass2NoOption", Upickle_serializeAndDeserializeCaseClass2NoOption)
+  }
+
+  def alignRight(d: Double) = {
+    val s = f"$d%8.4f"
+    val spaces = Math.max(0, 16 - s.length)
+    Seq.fill(spaces)(" ").mkString + s
   }
 
   def main(): Unit = {
@@ -30,8 +40,13 @@ object BenchTest extends JSApp {
     1 to iterations foreach { iteration ⇒
       run(iteration.toString)
     }
+    val alignLen = measures.map(_.name.length).max
+    measures.foreach { m ⇒
+      println(s"${m.name}${Seq.fill(alignLen - m.name.length)(" ").mkString} ${alignRight(m.opsPerSec)} ops/sec")
+    }
   }
 
+  val measures = mutable.ArrayBuffer[MeasureResult]()
   def measure(name: String, code: () ⇒ Unit) = {
     println(s"---------------------------------")
     println(s"Measuring: $name...")
@@ -70,7 +85,9 @@ object BenchTest extends JSApp {
         after = System.currentTimeMillis()
       }
       val opsPerSec = 1.0 * totalRuns / ((after - before) / 1000.0)
-      println(s"Total $totalRuns runs of '$name': for ${after - before}ms. $opsPerSec ops/sec")
+      val measureResult = MeasureResult(name, totalRuns, after-before, opsPerSec)
+      measures += measureResult
+      println(s"Total ${measureResult.totalRuns} runs of '${measureResult.name}': for ${measureResult.time} ms. ${measureResult.opsPerSec} ops/sec")
     }
     catch {
       case NonFatal(e) ⇒
