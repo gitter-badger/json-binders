@@ -14,6 +14,7 @@ lazy val jsonBinders = crossProject.settings(publishSettings:_*).settings(
       "com.hypertino" %%% "binders" % "1.0-SNAPSHOT",
       "org.scalatest" %%% "scalatest" % "3.0.0" % "test",
       "com.hypertino" %%% "scalamock-scalatest-support" % "3.4-SNAPSHOT" % "test",
+      "io.github.soc" %%% "scala-java-time" % "2.0.0-M2" % "test",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
     ) ++ {
       CrossVersion.partialVersion(scalaVersion.value) match {
