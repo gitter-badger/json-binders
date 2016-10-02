@@ -198,7 +198,15 @@ println(age.toInt)
 
 # Benchmark
 
+Benchmark test is done using `jmh` for JVM and with a simple and naive implementation for JS. Benchmark is run with sbt:
+
+- for JVM run `benchTestJVM/jmh:run`
+- for JS run `benchTestJS/run`
+
+Here are results that I've got on Macbook Pro Core i5 2.5GHz:
+
 TBD
+
 
 # Things to cover
 
