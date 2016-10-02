@@ -203,7 +203,7 @@ Benchmark test is done using `jmh` for JVM and with a simple and naive implement
 - for JVM run `benchTestJVM/jmh:run`
 - for JS run `benchTestJS/run`
 
-Here is the results that I get on Macbook Pro Core i5 2.5GHz:
+Here are results that I've got on Macbook Pro Core i5 2.5GHz:
 
 TBD
 
