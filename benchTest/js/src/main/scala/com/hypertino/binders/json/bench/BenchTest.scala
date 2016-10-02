@@ -7,7 +7,16 @@ import scala.util.control.NonFatal
 case class MeasureResult(name: String, totalRuns: Long, time: Long, opsPerSec: Double)
 
 object BenchTest extends JSApp {
-  val TEST_TIME = 10000 // ms
+  val TEST_TIME = 7000 // ms
+
+  def main(): Unit = {
+    val iterations = 3
+    1 to iterations foreach { iteration ⇒
+      run(iteration.toString)
+    }
+    println("------------------------------------------------------")
+    printMeasures(measures)
+  }
 
   def run(iteration: String): Unit = {
     val cls = new JsonBindersBenchmark
@@ -33,17 +42,6 @@ object BenchTest extends JSApp {
     val s = f"$d%8.4f"
     val spaces = Math.max(0, 16 - s.length)
     Seq.fill(spaces)(" ").mkString + s
-  }
-
-  def main(): Unit = {
-    val iterations = 3
-    1 to iterations foreach { iteration ⇒
-      run(iteration.toString)
-    }
-    val alignLen = measures.map(_.name.length).max
-    measures.foreach { m ⇒
-      println(s"${m.name}${Seq.fill(alignLen - m.name.length)(" ").mkString} ${alignRight(m.opsPerSec)} ops/sec")
-    }
   }
 
   val measures = mutable.ArrayBuffer[MeasureResult]()
@@ -92,6 +90,13 @@ object BenchTest extends JSApp {
     catch {
       case NonFatal(e) ⇒
         println(e)
+    }
+  }
+
+  private def printMeasures(measures: Iterable[MeasureResult]): Unit = {
+    val alignLen = measures.map(_.name.length).max
+    measures.foreach { m ⇒
+      println(s"${m.name}${Seq.fill(alignLen - m.name.length)(" ").mkString} ${alignRight(m.opsPerSec)} ops/sec. ${m.totalRuns} cnt for ${m.time} ms")
     }
   }
 }
