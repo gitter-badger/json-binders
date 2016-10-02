@@ -12,6 +12,22 @@ case class Bench2Class(x: String, y: Double, i: Int, b1: Bench1Class, b2: List[B
 case class Bench1ClassNoOption(a: String, b: Int, d: Double, an: String, bn: Int, dn: Double)
 case class Bench2ClassNoOption(x: String, y: Double, i: Int, b1: Bench1ClassNoOption, b2: List[Bench1ClassNoOption])
 
+object Bench1Class {
+  implicit val pkl = upickle.default.macroRW[Bench1Class]
+}
+
+object Bench2Class {
+  implicit val pkl = upickle.default.macroRW[Bench2Class]
+}
+
+object Bench1ClassNoOption {
+  implicit val pkl = upickle.default.macroRW[Bench1ClassNoOption]
+}
+
+object Bench2ClassNoOption {
+  implicit val pkl = upickle.default.macroRW[Bench2ClassNoOption]
+}
+
 @State(Scope.Benchmark)
 class JsonBindersBenchmark{
   import JsonBinders._

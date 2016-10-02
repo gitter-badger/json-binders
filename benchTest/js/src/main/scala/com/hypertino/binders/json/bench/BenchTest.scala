@@ -22,19 +22,20 @@ object BenchTest extends JSApp {
     val cls = new JsonBindersBenchmark
     import cls._
     println(s"Iteration: $iteration")
-    measure("Binders_serializeCaseClass2", Binders_serializeCaseClass2)
-    measure("Binders_serializeAndDeserializeCaseClass2", Binders_serializeAndDeserializeCaseClass2)
-    measure("Binders_deserializeCaseClass2", Binders_deserializeCaseClass2)
-    measure("Binders_serializeAndDeserializeCaseClass", Binders_serializeAndDeserializeCaseClass)
     measure("Binders_serializeCaseClass", Binders_serializeCaseClass)
     measure("Binders_deserializeCaseClass", Binders_deserializeCaseClass)
+    measure("Binders_serializeAndDeserializeCaseClass", Binders_serializeAndDeserializeCaseClass)
+    measure("Binders_serializeCaseClass2", Binders_serializeCaseClass2)
+    measure("Binders_deserializeCaseClass2", Binders_deserializeCaseClass2)
+    measure("Binders_serializeAndDeserializeCaseClass2", Binders_serializeAndDeserializeCaseClass2)
     measure("Binders_serializeAndDeserializeCaseClass2NoOption", Binders_serializeAndDeserializeCaseClass2NoOption)
-    measure("Upickle_serializeCaseClass2", Upickle_serializeCaseClass2)
-    measure("Upickle_serializeAndDeserializeCaseClass2", Upickle_serializeAndDeserializeCaseClass2)
-    measure("Upickle_deserializeCaseClass2", Upickle_deserializeCaseClass2)
+
     measure("Upickle_serializeCaseClass", Upickle_serializeCaseClass)
-    measure("Upickle_serializeAndDeserializeCaseClass", Upickle_serializeAndDeserializeCaseClass)
     measure("Upickle_deserializeCaseClass", Upickle_deserializeCaseClass)
+    measure("Upickle_serializeAndDeserializeCaseClass", Upickle_serializeAndDeserializeCaseClass)
+    measure("Upickle_serializeCaseClass2", Upickle_serializeCaseClass2)
+    measure("Upickle_deserializeCaseClass2", Upickle_deserializeCaseClass2)
+    measure("Upickle_serializeAndDeserializeCaseClass2", Upickle_serializeAndDeserializeCaseClass2)
     measure("Upickle_serializeAndDeserializeCaseClass2NoOption", Upickle_serializeAndDeserializeCaseClass2NoOption)
   }
 
