@@ -198,15 +198,34 @@ println(age.toInt)
 
 # Benchmark
 
-Benchmark test is done using `jmh` for JVM and with a simple and naive implementation for JS. Benchmark is run with sbt:
+Benchmark results here are gathered on Macbook Pro Core i5 2.5GHz. I'm comparing `json-binders` with `uPickle 0.4.1`.
 
-- for JVM run `benchTestJVM/jmh:run`
-- for JS run `benchTestJS/run`
+## JVM benchmark
 
-Here are results that I've got on Macbook Pro Core i5 2.5GHz:
+JVM benchmark is done with OpenJDK jmh tool. To validate results run `sbt 'benchTestJVM/jmh:run'`
 
-TBD
+## JS benchmark
 
+JS benchmark is more naive and straitforward. It's done with `node v6.3.0` and `fullOptJS` option enabled. To execute benchmark run `sbt 'benchTestJS/run'`
+
+Results:
+
+```
+Binders_serializeCaseClass                             299001.4286 ops/sec. 2093010 cnt for 7000 ms
+Binders_deserializeCaseClass                            26036.4205 ops/sec. 183010 cnt for 7029 ms
+Binders_serializeAndDeserializeCaseClass                21526.7284 ops/sec. 151010 cnt for 7015 ms
+Binders_serializeCaseClass2                             27178.4291 ops/sec. 191010 cnt for 7028 ms
+Binders_deserializeCaseClass2                            2473.9011 ops/sec. 18010 cnt for 7280 ms
+Binders_serializeAndDeserializeCaseClass2                2220.2191 ops/sec. 16010 cnt for 7211 ms
+Binders_serializeAndDeserializeCaseClass2NoOption        1710.0055 ops/sec. 12442 cnt for 7276 ms
+Upickle_serializeCaseClass                              35537.3198 ops/sec. 249010 cnt for 7007 ms
+Upickle_deserializeCaseClass                            20819.9059 ops/sec. 146010 cnt for 7013 ms
+Upickle_serializeAndDeserializeCaseClass                11695.6646 ops/sec. 82010 cnt for 7012 ms
+Upickle_serializeCaseClass2                              4985.0491 ops/sec. 35010 cnt for 7023 ms
+Upickle_deserializeCaseClass2                            2419.2860 ops/sec. 17010 cnt for 7031 ms
+Upickle_serializeAndDeserializeCaseClass2                1610.0759 ops/sec. 11665 cnt for 7245 ms
+Upickle_serializeAndDeserializeCaseClass2NoOption        2022.3135 ops/sec. 14773 cnt for 7305 ms
+```
 
 # Things to cover
 
