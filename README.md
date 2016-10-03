@@ -204,11 +204,27 @@ Benchmark results here are gathered on Macbook Pro Core i5 2.5GHz. I'm comparing
 
 JVM benchmark is done with OpenJDK jmh tool. To validate results run `sbt 'benchTestJVM/jmh:run'`
 
+```
+JsonBindersBenchmark.Binders_deserializeCaseClass                       thrpt  200   610167,407 ± 4217,269  ops/s
+JsonBindersBenchmark.Binders_deserializeCaseClass2                      thrpt  200    46471,465 ±  299,064  ops/s
+JsonBindersBenchmark.Binders_serializeAndDeserializeCaseClass           thrpt  200   306330,001 ± 2027,039  ops/s
+JsonBindersBenchmark.Binders_serializeAndDeserializeCaseClass2          thrpt  200    31640,815 ±  165,431  ops/s
+JsonBindersBenchmark.Binders_serializeAndDeserializeCaseClass2NoOption  thrpt  200    25878,555 ±  128,021  ops/s
+JsonBindersBenchmark.Binders_serializeCaseClass                         thrpt  200  1082355,813 ± 5263,266  ops/s
+JsonBindersBenchmark.Binders_serializeCaseClass2                        thrpt  200   103028,012 ±  441,978  ops/s
+
+JsonBindersBenchmark.Upickle_deserializeCaseClass                       thrpt  200   203965,085 ± 1693,887  ops/s
+JsonBindersBenchmark.Upickle_deserializeCaseClass2                      thrpt  200    22248,249 ±  282,005  ops/s
+JsonBindersBenchmark.Upickle_serializeAndDeserializeCaseClass           thrpt  200   111382,834 ±  542,432  ops/s
+JsonBindersBenchmark.Upickle_serializeAndDeserializeCaseClass2          thrpt  200    13816,731 ±  123,517  ops/s
+JsonBindersBenchmark.Upickle_serializeAndDeserializeCaseClass2NoOption  thrpt  200    15366,293 ±  161,253  ops/s
+JsonBindersBenchmark.Upickle_serializeCaseClass                         thrpt  200   410833,045 ± 2858,354  ops/s
+JsonBindersBenchmark.Upickle_serializeCaseClass2                        thrpt  200    40894,468 ±  245,502  ops/s
+```
+
 ## JS benchmark
 
 JS benchmark is more naive and straitforward. It's done with `node v6.3.0` and `fullOptJS` option enabled. To execute benchmark run `sbt 'benchTestJS/run'`
-
-Results:
 
 ```
 Binders_serializeCaseClass                             299001.4286 ops/sec. 2093010 cnt for 7000 ms
